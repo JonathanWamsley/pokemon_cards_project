@@ -6,7 +6,7 @@ from itertools import zip_longest
 from datetime import date
 
 
-def create_pokemon_set():
+def create_pokemon_list():
     """loads the pokemon set data that was scraped, cleans it, and converts it to a pandas DataFrame
 
     Args:
@@ -71,7 +71,8 @@ def clean_pokemon_list(pokemon_list):
     return pokemon_list
 
 
-pokemon_list_df = create_pokemon_set()
+pokemon_list_df = create_pokemon_list()
+
 
 file_path = f'C:/Users/jonny/programming_content/pokemon_cards/data_extracting/pokemon_cards/pokemon_cards/scraped_data/pokemon_sets_2020-03-24.json'
 with open(file_path) as f:
