@@ -2,22 +2,62 @@ import pandas as pd
 import numpy as np
 import json
 import re
-import os
 from itertools import zip_longest
 from datetime import date
 
 
-file_path = f'C:/Users/jonny/programming_content/pokemon_cards/data_extracting/pokemon_cards/pokemon_cards/scraped_data/pokemon_list_2020-03-24.json'
-with open(file_path) as f:
-    raw_data = json.load(f)
-pokemon_list = raw_data[0]['pokemon_list']
-pokemon_list[28] = 'Nidoran F'
-pokemon_list[31] = 'Nidoran M'
-pokemon_list[668] = 'Flabebe'
+def create_pokemon_set():
+    """loads the pokemon set data that was scraped, cleans it, and converts it to a pandas DataFrame
 
-pokemon_list_df = pd.DataFrame(data=pokemon_list, columns=['Pokemon Name'])
+    Args:
+        None
+
+    Returns:
+        DataFrame: a DataFrame of the pokemon sets
+    """
+    pokemon_set_file_path = f'C:/Users/jonny/programming_content/pokemon_cards/data_extracting/pokemon_cards' \
+        f'/pokemon_cards/scraped_data/pokemon_list_2020-03-24.json'
+    pokemon_set_raw = load_data(pokemon_set_file_path)
+    pokemon_list = pokemon_set_raw[0]['pokemon_list']
+    pokemon_list_clean = clean_pokemon_list(pokemon_list)
+    pokemon_list_df = pd.DataFrame(data=pokemon_list_clean, columns=['Pokemon Name'])
+    return pokemon_list_df
 
 
+def load_data(file_path):
+    """Opens and returns a json file at target file path
+    Args:
+        file_path (str): The file location of the JSON
+
+    Returns:
+        list: The whole JSON object
+    """
+    with open(file_path) as f:
+        raw_data = json.load(f)
+    return raw_data
+
+
+def clean_pokemon_list(pokemon_list):
+    """Gets and prints the spreadsheet's header columns
+
+    Args:
+        file_loc (str): The file location of the spreadsheet
+        print_cols (bool): A flag used to print the columns to the console
+            (default is False)
+
+    Returns:
+        list: a list of strings representing the header columns
+    """
+    POKEMON_NIDORAN_F = 28
+    POKEMON_NIDORAN_M = 31
+    POKEMON_FLABEBE = 668
+    pokemon_list[POKEMON_NIDORAN_F] = 'Nidoran F'
+    pokemon_list[POKEMON_NIDORAN_M] = 'Nidoran M'
+    pokemon_list[POKEMON_FLABEBE] = 'Flabebe'
+    return pokemon_list
+
+
+pokemon_list_df = create_pokemon_set()
 
 file_path = f'C:/Users/jonny/programming_content/pokemon_cards/data_extracting/pokemon_cards/pokemon_cards/scraped_data/pokemon_sets_2020-03-24.json'
 with open(file_path) as f:
