@@ -15,11 +15,8 @@ class TestETLProcessing(unittest.TestCase):
     def test_load_data(self):
         test_pokemon_list_path  = 'C:/Users/jonny/programming_content/pokemon_cards/data_transforming/scripts/tests/' \
                             'test_data/test_pokemon_list.json'
-        with open(test_pokemon_list_path) as f:
-            raw_data = json.load(f)
-
         expected = [{'pokemon_list': ['Bulbasaur', 'Ivysaur', 'Venusaur']}]
-        self.assertEqual(raw_data, expected)
+        self.assertEqual(load_data(test_pokemon_list_path), expected)
 
 
 if __name__ == "__main__":
