@@ -15,22 +15,36 @@ def create_pokemon_set():
     Returns:
         DataFrame: a DataFrame of the pokemon sets
     """
-    pokemon_set_file_path = f'C:/Users/jonny/programming_content/pokemon_cards/data_extracting/pokemon_cards' \
-        f'/pokemon_cards/scraped_data/pokemon_list_2020-03-24.json'
-    pokemon_set_raw = load_data(pokemon_set_file_path)
-    pokemon_list = pokemon_set_raw[0]['pokemon_list']
+    pokemon_list = load_pokemon_list()
     pokemon_list_clean = clean_pokemon_list(pokemon_list)
     pokemon_list_df = pd.DataFrame(data=pokemon_list_clean, columns=['Pokemon Name'])
     return pokemon_list_df
 
 
-def load_data(file_path):
-    """Opens and returns a json file at target file path
+def load_pokemon_list():
+    """ provides correct data path to be opened and extracted
+
     Args:
         file_path (str): The file location of the JSON
 
     Returns:
-        list: The whole JSON object
+        list: the pokemon names
+    """
+    pokemon_list_file_path = f'C:/Users/jonny/programming_content/pokemon_cards/data_extracting/pokemon_cards' \
+        f'/pokemon_cards/scraped_data/pokemon_list_2020-03-24.json'
+    pokemon_list_raw = load_data(pokemon_list_file_path)
+    pokemon_list_column = 'pokemon_list'
+    pokemon_list = pokemon_list_raw[0][pokemon_list_column]
+    return pokemon_list
+
+def load_data(file_path):
+    """Opens and returns a json file at target file path
+
+    Args:
+        file_path (str): The file location of the JSON
+
+    Returns:
+        list of dictionaries: The whole JSON object
     """
     with open(file_path) as f:
         raw_data = json.load(f)

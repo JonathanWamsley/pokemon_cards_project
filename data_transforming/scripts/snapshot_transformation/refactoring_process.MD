@@ -41,3 +41,16 @@ The Refactoring Cycle:
     - git add .
     - git commit -m "your commit message"
 7. Rinse and repeat
+
+
+### Problems
+
+I realize that there are tests to make sure your code works when you change the code base. 
+
+There are also tests, that test the data quality that should be ran before the main script
+
+For example, if a site changes its layout, that problem should be observed in the scraper test
+
+
+Right now, I do not have test for scraper, but i should. I should assume for now, that the data I scraped is correct then, and can make assumptions of the data format.
+
