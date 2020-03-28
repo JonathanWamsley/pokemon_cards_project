@@ -143,29 +143,6 @@ def known_set_name_no_abr(set_name, set_abr):
 pokemon_set_df = create_pokemon_set()
 
 
-# file_path = f'C:/Users/jonny/programming_content/pokemon_cards/data_extracting/pokemon_cards/pokemon_cards/scraped_data/pokemon_sets_2020-03-24.json'
-# with open(file_path) as f:
-#     raw_data = json.load(f)
-#
-# set_name = raw_data[0]['set_name']
-# set_date = raw_data[0]['set_date']
-# set_abr = raw_data[0]['set_abbreviation']
-#
-# # removes blank lines
-# set_name = list(filter(None, set_name))
-# set_date = list(filter(None, set_date))
-# set_abr = list(filter(None, set_abr))
-#
-# # sometimes a new set is known but the abr or release date is not
-# if len(set_date) < len(set_name):
-#     set_date.append('')
-# if len(set_abr) < len(set_name):
-#     set_abr.append('')
-#
-# pokemon_set_df = pd.DataFrame(np.array([set_name, set_date, set_abr]).T, columns=['Set Name', 'Set Date', 'Set Abr'])
-# pokemon_set_df['Set Name'] = pokemon_set_df['Set Name'].str.replace('&', 'and')
-
-
 
 
 file_path = f'C:/Users/jonny/programming_content/pokemon_cards/data_extracting/pokemon_cards/pokemon_cards/scraped_data/pokemon_cards_2020-03-24.json'
