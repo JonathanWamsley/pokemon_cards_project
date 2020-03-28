@@ -116,7 +116,7 @@ There are websites that host pokemon cards stats and display current price. Howe
 
 **Storage:**
 - JSON (key value object storage)
-- S3 (HDFS storage)
+- S3 (staging area)
 
 
 **Automation**
