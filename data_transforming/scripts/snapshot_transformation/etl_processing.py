@@ -7,16 +7,17 @@ from datetime import date
 
 
 def create_pokemon_list():
-    """loads the pokemon set data that was scraped, cleans it, and converts it to a pandas DataFrame
+    """loads the pokemon list data that was scraped, cleans it, and converts it to a pandas DataFrame
 
     Args:
         None
 
     Returns:
-        DataFrame: a DataFrame of the pokemon sets
+        DataFrame: a DataFrame of the pokemon list
     """
     pokemon_list = load_pokemon_list()
     pokemon_list_clean = clean_pokemon_list(pokemon_list)
+    pokemon_list_column = 'pokemon_list'
     pokemon_list_df = pd.DataFrame(data=pokemon_list_clean, columns=['Pokemon Name'])
     return pokemon_list_df
 
@@ -52,16 +53,15 @@ def load_data(file_path):
 
 
 def clean_pokemon_list(pokemon_list):
-    """Gets and prints the spreadsheet's header columns
+    """cleans pokemon names that have weird symbols
 
     Args:
-        file_loc (str): The file location of the spreadsheet
-        print_cols (bool): A flag used to print the columns to the console
-            (default is False)
+        pokemon_list (list): The pokemon list to clean
 
     Returns:
-        list: a list of strings representing the header columns
+        list: a cleaned pokemon list
     """
+    # Each pokemon has a pokedex ID. New pokemon are appended, So they will always have the same number
     POKEMON_NIDORAN_F = 28
     POKEMON_NIDORAN_M = 31
     POKEMON_FLABEBE = 668
@@ -74,27 +74,96 @@ def clean_pokemon_list(pokemon_list):
 pokemon_list_df = create_pokemon_list()
 
 
-file_path = f'C:/Users/jonny/programming_content/pokemon_cards/data_extracting/pokemon_cards/pokemon_cards/scraped_data/pokemon_sets_2020-03-24.json'
-with open(file_path) as f:
-    raw_data = json.load(f)
+def create_pokemon_set():
+    """loads the pokemon set data that was scraped, cleans it, and converts it to a pandas DataFrame
 
-set_name = raw_data[0]['set_name']
-set_date = raw_data[0]['set_date']
-set_abr = raw_data[0]['set_abbreviation']
+    Args:
+        None
 
-# removes blank lines
-set_name = list(filter(None, set_name))
-set_date = list(filter(None, set_date))
-set_abr = list(filter(None, set_abr))
+    Returns:
+        DataFrame: a DataFrame of the pokemon sets
+    """
+    pokemon_set_dict = load_pokemon_set()
+    pokemon_set_clean_df = clean_pokemon_set(pokemon_set_dict)
+    return pokemon_set_clean_df
 
-# sometimes a new set is known but the abr or release date is not
-if len(set_date) < len(set_name):
-    set_date.append('')
-if len(set_abr) < len(set_name):
-    set_abr.append('')
 
-pokemon_set_df = pd.DataFrame(np.array([set_name, set_date, set_abr]).T, columns=['Set Name', 'Set Date', 'Set Abr'])
-pokemon_set_df['Set Name'] = pokemon_set_df['Set Name'].str.replace('&', 'and')
+def load_pokemon_set():
+    """ provides correct data path to be opened and extracted
+
+    Args:
+        file_path (str): The file location of the JSON
+
+    Returns:
+        dict: the pokemon set names, date, abr
+    """
+    pokemon_set_file_path = f'C:/Users/jonny/programming_content/pokemon_cards/data_extracting/pokemon_cards/' \
+        f'pokemon_cards/scraped_data/pokemon_sets_2020-03-24.json'
+    pokemon_set_raw = load_data(pokemon_set_file_path)
+    pokemon_set_dict = pokemon_set_raw[0]
+    return pokemon_set_dict
+
+
+def clean_pokemon_set(pokemon_set_dict):
+    """ cleans the pokemon sets by removing empty values where a japanese set
+        Also fills the bottom list if a set name has been announced, but not the release date or abr name
+
+    Args:
+        pokemon_set_dict (dict): The scraped set
+
+    Returns:
+        dict: a pandas dict of the clean pokemon set
+    """
+    set_name = list(filter(None, pokemon_set_dict['set_name']))
+    set_date = list(filter(None, pokemon_set_dict['set_date']))
+    set_abr = list(filter(None, pokemon_set_dict['set_abbreviation']))
+
+    if known_set_name_no_date(set_name, set_date):
+        set_date.append('')
+
+    if known_set_name_no_abr(set_name, set_abr):
+        set_abr.append('')
+
+    # for common name conventions between different data sets replace & with and
+    set_name_clean = [name.replace('&', 'and') for name in set_name]
+
+    pokemon_set_df = pd.DataFrame(np.array([set_name, set_date, set_abr]).T,
+                                  columns=['Set Name', 'Set Date', 'Set Abr'])
+    return pokemon_set_df
+
+
+def known_set_name_no_date(set_name, set_date):
+    return len(set_date) < len(set_name)
+
+
+def known_set_name_no_abr(set_name, set_abr):
+    return len(set_abr) < len(set_name)
+
+
+pokemon_set_df = create_pokemon_set()
+
+
+# file_path = f'C:/Users/jonny/programming_content/pokemon_cards/data_extracting/pokemon_cards/pokemon_cards/scraped_data/pokemon_sets_2020-03-24.json'
+# with open(file_path) as f:
+#     raw_data = json.load(f)
+#
+# set_name = raw_data[0]['set_name']
+# set_date = raw_data[0]['set_date']
+# set_abr = raw_data[0]['set_abbreviation']
+#
+# # removes blank lines
+# set_name = list(filter(None, set_name))
+# set_date = list(filter(None, set_date))
+# set_abr = list(filter(None, set_abr))
+#
+# # sometimes a new set is known but the abr or release date is not
+# if len(set_date) < len(set_name):
+#     set_date.append('')
+# if len(set_abr) < len(set_name):
+#     set_abr.append('')
+#
+# pokemon_set_df = pd.DataFrame(np.array([set_name, set_date, set_abr]).T, columns=['Set Name', 'Set Date', 'Set Abr'])
+# pokemon_set_df['Set Name'] = pokemon_set_df['Set Name'].str.replace('&', 'and')
 
 
 
