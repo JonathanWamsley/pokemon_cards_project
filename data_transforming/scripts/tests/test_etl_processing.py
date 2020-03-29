@@ -8,7 +8,7 @@ from datetime import date
 
 from pandas.testing import assert_frame_equal, assert_series_equal
 
-from snapshot_transformation.etl_processing import (load_data, load_pokemon_list)
+from snapshot_transformation.etl_processing import (load_data, clean_pokemon_set)
 
 
 class TestETLProcessing(unittest.TestCase):
@@ -19,6 +19,8 @@ class TestETLProcessing(unittest.TestCase):
         data = load_data(test_pokemon_list_path)
         self.assertEqual(data, expected_data)
 
+    def test_clean_pokemon_set(self):
+        pass
 
 
 

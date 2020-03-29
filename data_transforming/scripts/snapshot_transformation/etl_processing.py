@@ -118,10 +118,10 @@ def clean_pokemon_set(pokemon_set_dict):
     set_date = list(filter(None, pokemon_set_dict['set_date']))
     set_abr = list(filter(None, pokemon_set_dict['set_abbreviation']))
 
-    if known_set_name_no_date(set_name, set_date):
+    while known_set_name_no_date(set_name, set_date):
         set_date.append('')
 
-    if known_set_name_no_abr(set_name, set_abr):
+    while known_set_name_no_abr(set_name, set_abr):
         set_abr.append('')
 
     # for common name conventions between different data sets replace & with and
@@ -141,7 +141,6 @@ def known_set_name_no_abr(set_name, set_abr):
 
 
 pokemon_set_df = create_pokemon_set()
-
 
 
 
